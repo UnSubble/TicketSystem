@@ -3,6 +3,10 @@ package com.unsubble.backend.manager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.unsubble.backend.connector.TicketRepository;
 import com.unsubble.backend.connector.TicketRepositoryImpl;
 import com.unsubble.backend.connector.UserRepository;
@@ -26,6 +30,8 @@ public final class RepoManager {
 		if (userRepo != null)
 			return;
 		initializeRepos();
+		Logger logger = LogManager.getLogger();
+		logger.log(Level.TRACE, "Repositories initialized!");
 	}
 	
 	public static UserRepository getUserRepository() {

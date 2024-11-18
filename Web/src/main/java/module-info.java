@@ -1,4 +1,5 @@
 module com.unsubble.web {
-	requires com.unsubble.dbConnector;
 	requires jakarta.servlet;
+	requires dbConnector;
+	requires org.apache.logging.log4j;
 }

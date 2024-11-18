@@ -10,7 +10,7 @@
 
 		<properties>
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:sqlite:../database.db" />
+				value="jdbc:sqlite:/home/oem/Desktop/projects/SupportAndTicketingSystem/database.db" />
 			<property name="javax.persistence.jdbc.driver"
 				value="org.sqlite.JDBC" />
 			<property name="javax.persistence.jdbc.user" value="" />

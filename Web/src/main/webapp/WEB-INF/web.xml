@@ -18,7 +18,9 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
+	<listener>
+		<listener-class>com.unsubble.web.OnContextInitializeListener</listener-class>
+	</listener>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>/resource/*</url-pattern>

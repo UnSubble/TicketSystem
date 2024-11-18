@@ -2,6 +2,8 @@ package com.unsubble.web;
 
 import java.io.IOException;
 
+import com.unsubble.backend.manager.RepoManager;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,6 +22,13 @@ public class Authentication extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
+		boolean isMatch = RepoManager.getUserRepository().matches(username, password);
+		if (isMatch) {
+			resp.sendRedirect(password);
+		} else {
+			req.getServletContext().setAttribute("error", true);
+			resp.sendRedirect("/Web/auth");
+		}
 	}
 
 }

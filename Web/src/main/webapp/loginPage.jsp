@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -17,12 +18,15 @@
 			id="register-span">Kayıt Ol</span>
 		</label>
 
-		<form method="post" id="auth-form" action="/Web/test">
+		<form method="post" id="auth-form" action="/Web/auth">
 			<label for="username">Kullanıcı Adı</label> <input type="text"
 				name="username" id="username" placeholder="Kullanıcı adınızı girin"
 				required /> <label for="password">Şifre</label> <input
 				type="password" name="password" id="password"
 				placeholder="Şifrenizi girin" required />
+			<c:if test="${error}">
+				<span style="size: 150%;color: crimson;">Girdiğiniz kullanıcı adı veya şifre yanlış!</span>
+			</c:if>
 			<button type="submit">Giriş Yap</button>
 		</form>
 	</div>
