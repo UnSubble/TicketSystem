@@ -1,0 +1,106 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	background-color: #f0f4f8;
+	font-family: Arial, sans-serif;
+	color: #333;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: #fff;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+	width: 300px;
+}
+
+#switch-label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 20px;
+	gap: 10px;
+	font-size: 1.1em;
+	cursor: pointer;
+	background-color: #e0e5ec;
+	padding: 8px 16px;
+	border-radius: 50px;
+	position: relative;
+	transition: background-color 0.3s ease-in-out;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+#login-register-switch {
+	display: none;
+}
+
+#login-span, #register-span {
+	font-weight: bold;
+	padding: 8px 20px;
+	border-radius: 50px;
+	transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out,
+		transform 0.3s ease-in-out;
+}
+
+#login-span.active, #register-span.active {
+	background-color: #0066cc;
+	color: #fff;
+	transform: scale(1.1);
+}
+
+#login-span, #register-span {
+	background-color: transparent;
+	color: #333;
+	transform: scale(1);
+}
+
+input[type="text"], input[type="password"] {
+	width: 100%;
+	padding: 10px;
+	margin: 15px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 1em;
+	color: #333;
+	transition: border-color 0.3s, box-shadow 0.3s ease-in-out;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+	border-color: #0066cc;
+	outline: none;
+	box-shadow: 0px 0px 5px rgba(0, 102, 204, 0.3);
+}
+
+button {
+	width: 100%;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	background-color: #0066cc;
+	color: #fff;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+	background-color: #005bb5;
+}
+
+button:active {
+	background-color: #004a94;
+}
