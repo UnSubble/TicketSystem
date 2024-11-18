@@ -1,0 +1,7 @@
+.metadata/
+**/.settings/
+**/target/
+**/.*
+!.gitignore
+Servers/
+
