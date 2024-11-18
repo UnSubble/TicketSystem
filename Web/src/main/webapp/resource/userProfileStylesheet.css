@@ -1,0 +1,92 @@
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f9;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 80%;
+	margin: auto;
+	max-width: 800px;
+}
+
+.header {
+	background-color: #4CAF50;
+	color: white;
+	padding: 15px;
+	text-align: center;
+}
+
+.user-info {
+	margin: 20px 0;
+	padding: 15px;
+	background-color: #ffffff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-list {
+	margin: 20px 0;
+	padding: 15px;
+	background-color: #ffffff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ticket {
+	padding: 10px;
+	margin: 10px 0;
+	background-color: #f0f0f0;
+	border-left: 5px solid #4CAF50;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ticket button {
+	background-color: #f44336;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.ticket button:hover {
+	background-color: #e53935;
+}
+
+.logout-btn, .add-ticket-btn {
+	margin-top: 20px;
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.logout-btn:hover, .add-ticket-btn:hover {
+	background-color: #45a049;
+}
+
+.inner-btn {
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	background-color: #0066cc;
+	color: #fff;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.inner-btn:hover {
+	background-color: #005bb5;
+}
+
+.inner-btn:active {
+	background-color: #004a94;
+}

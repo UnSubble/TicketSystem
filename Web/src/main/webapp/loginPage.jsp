@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Giriş Yap / Kayıt Ol</title>
-<link type="text/css" rel="stylesheet" href="./resource/style.css">
+<link type="text/css" rel="stylesheet"
+	href="./resource/loginPageStylesheet.css">
 </head>
 <body>
 	<div class="container">
@@ -24,8 +25,13 @@
 				required /> <label for="password">Şifre</label> <input
 				type="password" name="password" id="password"
 				placeholder="Şifrenizi girin" required />
-			<c:if test="${error}">
-				<span style="size: 150%;color: crimson;">Girdiğiniz kullanıcı adı veya şifre yanlış!</span>
+			<c:if test="${error eq 1}">
+				<span style="size: 150%; color: crimson;">Girdiğiniz
+					kullanıcı adı veya şifre yanlış!</span>
+			</c:if>
+			<c:if test="${error eq 2}">
+				<span style="size: 150%; color: crimson;">Girdiğiniz
+					kullanıcı adı zaten alınmış!</span>
 			</c:if>
 			<button type="submit">Giriş Yap</button>
 		</form>
