@@ -25,7 +25,11 @@ public class Authentication extends HttpServlet {
 		boolean isMatch = RepoManager.getUserRepository().matches(username, password);
 		if (isMatch) {
 			req.getServletContext().setAttribute("username", username);
-			resp.sendRedirect("/Web/userProfile.jsp");
+			if (username.equalsIgnoreCase("unsubble")) {
+				req.getRequestDispatcher("admin.jsp").forward(req, resp);
+			} else {
+				resp.sendRedirect("/Web/userProfile.jsp");
+			}
 		} else {
 			req.getServletContext().setAttribute("error", 1);
 			resp.sendRedirect("/Web/auth");
