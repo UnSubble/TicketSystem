@@ -19,7 +19,7 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<listener>
-		<listener-class>com.unsubble.web.OnContextInitializeListener</listener-class>
+		<listener-class>com.unsubble.web.listeners.OnContextInitializeListener</listener-class>
 	</listener>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>

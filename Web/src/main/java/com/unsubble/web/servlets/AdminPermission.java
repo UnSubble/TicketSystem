@@ -1,8 +1,9 @@
-package com.unsubble.web;
+package com.unsubble.web.servlets;
 
 import java.io.IOException;
 
-import com.unsubble.backend.manager.RepoManager;
+import com.unsubble.web.controllers.AdminController;
+import com.unsubble.web.controllers.UserRepositoryController;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,14 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = { "/admin/*" })
-public class Admin extends HttpServlet {
+@WebServlet(urlPatterns = "/admin/*")
+public class AdminPermission extends HttpServlet {
 	
 	private void redirectAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		if (RepoManager.getUserRepository().matches(username, password) 
-				&& "unsubble".equalsIgnoreCase(username)) {
+		if (UserRepositoryController.getInstance().matches(username, password) 
+				&& AdminController.getInstance().getAdmin(username).isPresent()) {
 			req.getRequestDispatcher("admin.jsp").forward(req, resp);
 		} else {
 			resp.sendRedirect("/Web/loginPage.jsp");
