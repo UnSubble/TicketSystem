@@ -1,6 +1,7 @@
 package com.unsubble.web.servlets;
 
 import java.io.IOException;
+import java.util.Date;
 
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.UserRepositoryController;
@@ -23,8 +24,10 @@ public class Authentication extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		boolean isMatch = UserRepositoryController.getInstance().matches(username, password);
+		UserRepositoryController controller = UserRepositoryController.getInstance();
+		boolean isMatch = controller.matches(username, password);
 		if (isMatch) {
+			controller.getUser(username).setLastLogin(new Date());
 			req.getServletContext().setAttribute("username", username);
 			if (AdminController.getInstance().getAdmin(username).isPresent()) {
 				req.getRequestDispatcher("admin.jsp").forward(req, resp);

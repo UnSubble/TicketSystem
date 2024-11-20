@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.unsubble" additivity="false">
+			<AppenderRef ref="LogToConsole"/>
+		</Logger>
+    </Loggers>
+</Configuration>

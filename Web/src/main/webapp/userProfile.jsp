@@ -24,14 +24,16 @@
 				</p>
 			</div>
 
-			<div class="ticket-list">
-				<h3>Açtığınız Ticketlar</h3>
-				<div id="ticket-container">
-					<span><strong>Ticket 1:</strong> Konu: test
-						<button class="inner-btn">Sil</button>
-						<button class="inner-btn">Devam Et</button> </span>
+			<form method="GET">
+				<div class="ticket-list">
+					<h3>Açtığınız Ticketlar</h3>
+					<div id="ticket-container">
+						<span><strong>Ticket 1:</strong> Konu: test
+							<button class="inner-btn">Sil</button>
+							<button class="inner-btn">Devam Et</button> </span>
+					</div>
 				</div>
-			</div>
+			</form>
 
 			<button class="add-ticket-btn">Yeni Ticket Ekle</button>
 		</div>
