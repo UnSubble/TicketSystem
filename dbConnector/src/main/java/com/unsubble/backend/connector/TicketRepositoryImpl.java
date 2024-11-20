@@ -29,7 +29,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 	@Override
 	public List<Ticket> getAllOpenTickets() {
 		TypedQuery<Ticket> q = manager.createQuery(
-				"SELECT t FROM tickets t WHERE t.is_closed = false", Ticket.class);
+				"SELECT t FROM tickets t WHERE t.closed = 0", Ticket.class);
 		return q.getResultList();
 	}
 
