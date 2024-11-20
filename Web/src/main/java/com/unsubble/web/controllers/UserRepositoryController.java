@@ -17,7 +17,9 @@ public class UserRepositoryController {
 	}
 	
 	public boolean matches(String username, String password) {
-		return username != null && password != null && userRepo.matches(username, password);
+		if (username == null || password == null)
+			return false;
+		return userRepo.matches(username, password);
 	}
 	
 	public boolean addUser(User user) {
@@ -28,6 +30,8 @@ public class UserRepositoryController {
 	}
 	
 	public boolean isTaken(String username) {
+		if (username == null)
+			return false;
 		return userRepo.getUserByName(username) != null;
 	}
 
