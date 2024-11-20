@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,18 +28,24 @@
 			<form method="GET" action="/Web/ticket">
 				<div class="ticket-list">
 					<h3>Açtığınız Ticketlar</h3>
-					<div id="ticket-container">
-						<span><strong>Ticket 1:</strong> Konu: test
-							<button class="inner-btn" name="deleteTicket" value="56">Sil</button>
-							<button class="inner-btn" name="continueTicket" value="56">Devam Et</button> </span>
-					</div>
+					<c:forEach var="ticket" items="${ticketsBelongsToUser}"
+						varStatus="ticketStat">
+						<div id="ticket-container">
+							<span><strong>Ticket ${ticketStat.index + 1}:</strong>
+								Konu: ${ticket.title}
+								<button class="inner-btn" name="deleteTicket"
+									value="${ticket.id}">Sil</button>
+								<button class="inner-btn" name="continueTicket"
+									value="${ticket.id}">Devam Et</button> </span>
+						</div>
+					</c:forEach>
 				</div>
 			</form>
-
+			
 			<button class="add-ticket-btn">Yeni Ticket Ekle</button>
 		</div>
 		<form id="logout-form" action="/Web/loginPage.jsp" method="POST">
-			<button class="logout-btn"">Çıkış Yap</button>
+			<button class="logout-btn">Çıkış Yap</button>
 		</form>
 	</div>
 </body>

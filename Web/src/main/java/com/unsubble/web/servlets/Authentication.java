@@ -3,9 +3,12 @@ package com.unsubble.web.servlets;
 import java.io.IOException;
 import java.util.Date;
 
+import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
+import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,15 +27,19 @@ public class Authentication extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		UserRepositoryController controller = UserRepositoryController.getInstance();
-		boolean isMatch = controller.matches(username, password);
+		UserRepositoryController userController = UserRepositoryController.getInstance();
+		boolean isMatch = userController.matches(username, password);
 		if (isMatch) {
-			controller.getUser(username).setLastLogin(new Date());
-			req.getServletContext().setAttribute("username", username);
-			if (AdminController.getInstance().getAdmin(username).isPresent()) {
+			User targetUser = userController.getUser(username);
+			targetUser.setLastLogin(new Date());
+			req.getSession().setAttribute("username", username);
+			if (AdminController.getInstance().isAdmin(username)) {
 				req.getRequestDispatcher("admin").forward(req, resp);
 			} else {
-				resp.sendRedirect("/Web/userProfile.jsp");
+				TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+				req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
+				RequestDispatcher dispatcher = req.getRequestDispatcher("userProfile.jsp");
+				dispatcher.forward(req, resp);
 			}
 		} else {
 			req.getServletContext().setAttribute("error", 1);

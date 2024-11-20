@@ -68,6 +68,10 @@ public class AdminController {
 			timer.cancel();
 		}
 	}
+	
+	public boolean isAdmin(String username) {
+		return getAdmin(username).isPresent();
+	}
 
 	public static AdminController getInstance() {
 		return INSTANCE;

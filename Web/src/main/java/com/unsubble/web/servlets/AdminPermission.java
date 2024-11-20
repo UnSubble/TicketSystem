@@ -2,6 +2,10 @@ package com.unsubble.web.servlets;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
@@ -14,16 +18,18 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/admin/*")
 public class AdminPermission extends HttpServlet {
-	
+
 	private void redirectAdmin(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		if (UserRepositoryController.getInstance().matches(username, password) 
-				&& AdminController.getInstance().getAdmin(username).isPresent()) {
+		if (UserRepositoryController.getInstance().matches(username, password)
+				&& AdminController.getInstance().isAdmin(username)) {
 			TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
-			req.getServletContext().setAttribute("listOfTickets", ticketController.getAllTickets());
+			Logger logger = LogManager.getLogger();
+			logger.log(Level.INFO, "An admin joined to the system. Let's welcome him. Welcome " + username);
+			req.getSession().setAttribute("listOfTickets", ticketController.getAllTickets());
 			req.getRequestDispatcher("admin.jsp").forward(req, resp);
-		} else {	
+		} else {
 			resp.sendRedirect("/Web/loginPage.jsp");
 		}
 	}
@@ -37,6 +43,5 @@ public class AdminPermission extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		redirectAdmin(req, resp);
 	}
-	
-	
+
 }

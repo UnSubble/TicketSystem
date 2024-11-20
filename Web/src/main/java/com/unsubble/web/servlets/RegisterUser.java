@@ -1,9 +1,6 @@
 package com.unsubble.web.servlets;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -37,13 +34,12 @@ public class RegisterUser extends HttpServlet {
 			User newUser = new User(username, password, now, now);
 			if (controller.addUser(newUser)) {
 				resp.sendRedirect("/Web/loginPage.jsp");
-				logger.log(Level.INFO,"[INFO] %s has registered at %s".formatted(username, LocalDateTime.now()));
+				logger.log(Level.INFO, "[INFO] %s has registered at %s".formatted(username, LocalDateTime.now()));
 			} else {
 				resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				logger.log(Level.ERROR, "An error occured while registering the user.");
 			}
 		}
 	}
-	
-	
+
 }
