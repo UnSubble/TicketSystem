@@ -30,7 +30,7 @@ public class Authentication extends HttpServlet {
 			controller.getUser(username).setLastLogin(new Date());
 			req.getServletContext().setAttribute("username", username);
 			if (AdminController.getInstance().getAdmin(username).isPresent()) {
-				req.getRequestDispatcher("admin.jsp").forward(req, resp);
+				req.getRequestDispatcher("admin").forward(req, resp);
 			} else {
 				resp.sendRedirect("/Web/userProfile.jsp");
 			}

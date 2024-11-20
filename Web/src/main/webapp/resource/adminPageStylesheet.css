@@ -80,3 +80,43 @@ body {
 	font-size: 14px;
 	color: #888;
 }
+
+.ticket-actions {
+	margin-top: 10px;
+	display: flex;
+	gap: 10px;
+}
+
+.ticket-btn {
+	padding: 10px 15px;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+	background-color: #e74c3c;
+}
+
+.delete-btn:hover {
+	background-color: #c0392b;
+}
+
+.close-btn {
+	background-color: #f39c12;
+}
+
+.close-btn:hover {
+	background-color: #e67e22;
+}
+
+.continue-btn {
+	background-color: #3498db;
+}
+
+.continue-btn:hover {
+	background-color: #2980b9;
+}

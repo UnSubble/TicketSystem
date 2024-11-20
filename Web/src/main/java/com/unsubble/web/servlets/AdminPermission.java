@@ -3,6 +3,7 @@ package com.unsubble.web.servlets;
 import java.io.IOException;
 
 import com.unsubble.web.controllers.AdminController;
+import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
 
 import jakarta.servlet.ServletException;
@@ -19,8 +20,10 @@ public class AdminPermission extends HttpServlet {
 		String password = req.getParameter("password");
 		if (UserRepositoryController.getInstance().matches(username, password) 
 				&& AdminController.getInstance().getAdmin(username).isPresent()) {
+			TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+			req.getServletContext().setAttribute("listOfTickets", ticketController.getAllTickets());
 			req.getRequestDispatcher("admin.jsp").forward(req, resp);
-		} else {
+		} else {	
 			resp.sendRedirect("/Web/loginPage.jsp");
 		}
 	}

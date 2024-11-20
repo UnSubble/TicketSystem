@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,19 +17,33 @@
 		</header>
 		<main class="admin-content">
 			<h2>Gelen Ticketlar</h2>
-			<div class="tickets">
-				<div class="ticket">
-					<h3>Konu: Örnek Sorun</h3>
-					<p>Mesaj: Bir sorunum var...</p>
-					<span>Gönderen: kullanıcı@example.com</span>
+			<form action="/Web/ticket" method="GET">
+				<div class="tickets">
+					<c:forEach var="ticket" items="${listOfTickets}">
+						<div class="ticket">
+							<h3>
+								Konu:
+								<c:out value="${ticket.title}" />
+							</h3>
+							<p>
+								Mesaj:
+								<c:out value="${ticket.content}" />
+							</p>
+							<span>Gönderen: <c:out value="${ticket.user.name}" /></span>
+							<div class="ticket-actions">
+								<button class="ticket-btn delete-btn" name="deleteTicket"
+									value="${ticket.id}">Sil</button>
+								<button class="ticket-btn close-btn" name="closeTicket"
+									value="${ticket.id}">Kapat</button>
+								<button class="ticket-btn continue-btn" name="continueTicket"
+									value="${ticket.id}">Devam Et</button>
+							</div>
+						</div>
+					</c:forEach>
 				</div>
-				<div class="ticket">
-					<h3>Konu: Örnek Sorun 2</h3>
-					<p>Mesaj: Bir başka sorunum var...</p>
-					<span>Gönderen: kullanıcı2@example.com</span>
-				</div>
-			</div>
+			</form>
 		</main>
 	</div>
 </body>
 </html>
+

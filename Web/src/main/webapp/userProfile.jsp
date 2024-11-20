@@ -24,13 +24,13 @@
 				</p>
 			</div>
 
-			<form method="GET">
+			<form method="GET" action="/Web/ticket">
 				<div class="ticket-list">
 					<h3>Açtığınız Ticketlar</h3>
 					<div id="ticket-container">
 						<span><strong>Ticket 1:</strong> Konu: test
-							<button class="inner-btn">Sil</button>
-							<button class="inner-btn">Devam Et</button> </span>
+							<button class="inner-btn" name="deleteTicket" value="56">Sil</button>
+							<button class="inner-btn" name="continueTicket" value="56">Devam Et</button> </span>
 					</div>
 				</div>
 			</form>

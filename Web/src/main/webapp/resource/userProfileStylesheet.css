@@ -90,3 +90,17 @@ body {
 .inner-btn:active {
 	background-color: #004a94;
 }
+
+.inner-btn.closed {
+	background-color: #ccc;
+	color: #666;
+	cursor: not-allowed;
+}
+
+.inner-btn.closed:hover {
+	background-color: #ccc;
+}
+
+.inner-btn.closed:active {
+	background-color: #ccc;
+}
