@@ -11,8 +11,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.eclipse.persistence.annotations.PrimaryKey;
-
 @Table(name = "users")
 @Entity(name = "users")
 public class User {

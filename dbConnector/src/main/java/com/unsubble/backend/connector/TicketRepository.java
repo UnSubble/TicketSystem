@@ -12,6 +12,8 @@ public interface TicketRepository {
 	
 	List<Ticket> getAllOpenTickets();
 	
+	Ticket getTicketById(int id);
+	
 	void addTicket(Ticket ticket);
 	
 	void deleteTicket(Ticket ticket);

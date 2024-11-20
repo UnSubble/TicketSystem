@@ -32,6 +32,14 @@ public class TicketRepositoryImpl implements TicketRepository {
 				"SELECT t FROM tickets t WHERE t.closed = 0", Ticket.class);
 		return q.getResultList();
 	}
+	
+	@Override
+	public Ticket getTicketById(int id) {
+		TypedQuery<Ticket> q = manager.createQuery(
+				"SELECT t FROM tickets t WHERE t.id = :id", Ticket.class)
+				.setParameter("id", id);
+		return q.getResultList().getFirst();
+	}
 
 	@Override
 	public void addTicket(Ticket ticket) {
