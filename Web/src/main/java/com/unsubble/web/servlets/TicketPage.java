@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = "/ticket")
 public class TicketPage extends HttpServlet {
 	
-	private void performTicket(Consumer<Ticket> job, String... params) {
+	private void performTicket(Consumer<Ticket> job, String... params) throws ServletException, IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		for (String idStr : params) {
 			int id = Integer.parseInt(idStr);
@@ -58,16 +58,30 @@ public class TicketPage extends HttpServlet {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		AdminController adminController = AdminController.getInstance();
 		String usernameOnReq = req.getSession().getAttribute("username").toString();
+		boolean op = false;
 		if (params.containsKey("deleteTicket")) {
 			performTicket(ticketController::removeTicket, params.get("deleteTicket"));
 			resetAttributes(req, resp, usernameOnReq);
-		}
-		if (params.containsKey("continueTicket")) {
-			// TODO
+			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("closeTicket")) {
 			performTicket(t -> t.setClosed(true), params.get("closeTicket"));
 			resetAttributes(req, resp, usernameOnReq);
+			op = true;
+		}
+		if (!op && params.containsKey("continueTicket")) {
+			performTicket(x -> {
+				if (x.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
+					req.setAttribute("ticket", x);
+					try {
+						req.getRequestDispatcher("section.jsp").forward(req, resp);
+					} catch (ServletException | IOException e) {
+						Logger logger = LogManager.getLogger();
+						logger.log(Level.ERROR, "An error occurred while redirecting to the ticket");
+						resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					}
+				}
+			}, params.get("continueTicket"));
 		}
 	}
 	

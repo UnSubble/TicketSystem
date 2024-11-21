@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.unsubble.backend.connector.TicketRepository;
 import com.unsubble.backend.manager.RepoManager;
+import com.unsubble.backend.model.SupportItem;
 import com.unsubble.backend.model.Ticket;
 import com.unsubble.backend.model.User;
 
@@ -40,6 +41,13 @@ public class TicketRepositoryController {
 	
 	public void removeTicket(Ticket ticket) {
 		ticketRepo.deleteTicket(ticket);
+	}
+	
+	public boolean addItemToTicket(Ticket ticket, SupportItem item) {
+		if (ticket == null || item == null)
+			return false;
+		ticketRepo.addItemToTicket(ticket, item);
+		return true;
 	}
 
     public static TicketRepositoryController getInstance() {
