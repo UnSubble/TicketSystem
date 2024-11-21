@@ -33,9 +33,10 @@
 							<div class="ticket-actions">
 								<button class="ticket-btn delete-btn" name="deleteTicket"
 									value="${ticket.id}">Sil</button>
-								<button class="ticket-btn close-btn" name="closeTicket"
-									value="${ticket.id}">Kapat</button>
-								<button class="ticket-btn continue-btn" name="continueTicket"
+								<button
+									class="ticket-btn close-btn ${ticket.closed ? 'closed-ticket-btn' : ''}"
+									name="closeTicket" value="${ticket.id}">Kapat</button>
+								<button class="ticket-btn continue-btn ${ticket.closed ? 'closed-ticket-btn' : ''}" name="continueTicket"
 									value="${ticket.id}">Devam Et</button>
 							</div>
 						</div>

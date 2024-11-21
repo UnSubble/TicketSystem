@@ -3,6 +3,7 @@ package com.unsubble.web.servlets;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -22,35 +23,51 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/ticket")
 public class TicketPage extends HttpServlet {
+	
+	private void performTicket(Consumer<Ticket> job, String... params) {
+		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+		for (String idStr : params) {
+			int id = Integer.parseInt(idStr);
+			Optional<Ticket> optTicket = ticketController.getTicketById(id);
+			if (optTicket.isEmpty()) {
+				Logger logger = LogManager.getLogger();
+				logger.log(Level.ERROR, "No tickets were found with the given ID.");
+				continue;
+			}
+			job.accept(optTicket.get());
+		}
+	}
+	
+	private void resetAttributes(HttpServletRequest req, HttpServletResponse resp, String usernameOnReq) throws IOException {
+		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+		AdminController adminController = AdminController.getInstance();
+		if (adminController.isAdmin(usernameOnReq)) {
+			req.getSession().setAttribute("listOfTickets", ticketController.getAllTickets());
+			resp.sendRedirect("/Web/admin.jsp");
+		} else {
+			UserRepositoryController userController = UserRepositoryController.getInstance();
+			User user = userController.getUser(usernameOnReq);
+			req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(user));
+			resp.sendRedirect("/Web/userProfile.jsp");
+		}
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Map<String, String[]> params = req.getParameterMap();
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+		AdminController adminController = AdminController.getInstance();
+		String usernameOnReq = req.getSession().getAttribute("username").toString();
 		if (params.containsKey("deleteTicket")) {
-			for (String idStr : params.get("deleteTicket")) {
-				int id = Integer.parseInt(idStr);
-				Optional<Ticket> optTicket = ticketController.getTicketById(id);
-				if (optTicket.isEmpty()) {
-					Logger logger = LogManager.getLogger();
-					logger.log(Level.ERROR, "No tickets were found with the given ID.");
-					return;
-				}
-				ticketController.removeTicket(optTicket.get());
-			}
-			String username = req.getSession().getAttribute("username").toString();
-			if (AdminController.getInstance().isAdmin(username)) {
-				req.getSession().setAttribute("listOfTickets", ticketController.getAllTickets());
-				resp.sendRedirect("/Web/admin.jsp");
-			} else {
-				UserRepositoryController userController = UserRepositoryController.getInstance();
-				User user = userController.getUser(username);
-				req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(user));
-				resp.sendRedirect("/Web/userProfile.jsp");
-			}
+			performTicket(ticketController::removeTicket, params.get("deleteTicket"));
+			resetAttributes(req, resp, usernameOnReq);
 		}
 		if (params.containsKey("continueTicket")) {
 			// TODO
+		}
+		if (adminController.isAdmin(usernameOnReq) && params.containsKey("closeTicket")) {
+			performTicket(t -> t.setClosed(true), params.get("closeTicket"));
+			resetAttributes(req, resp, usernameOnReq);
 		}
 	}
 	
