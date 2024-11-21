@@ -9,6 +9,8 @@
 <title>Ticket Details</title>
 <link rel="stylesheet" type="text/css"
 	href="./resource/sectionPageStylesheet.css">
+<link type="text/css" rel="stylesheet"
+	href="./resource/closedButtonStylesheet.css">
 </head>
 <body>
 	<div class="container">
@@ -38,8 +40,11 @@
 			<h3>Yorum Yap</h3>
 			<form action="/Web/addItemToTicket" method="post">
 				<textarea name="commentContent"
+					disabled="${ticket.closed ? 'disabled' : 'enabled'}"
 					placeholder="Yorumunuzu buraya yazın..." required></textarea>
-				<button type="submit">Gönder</button>
+				<button type="submit"
+					class="${ticket.closed ? 'closed-ticket-btn' : ''}"
+					disabled="${ticket.closed ? 'disabled' : 'enabled'}">Gönder</button>
 			</form>
 		</div>
 	</div>

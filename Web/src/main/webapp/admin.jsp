@@ -7,6 +7,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="./resource/adminPageStylesheet.css">
+<link type="text/css" rel="stylesheet"
+	href="./resource/closedButtonStylesheet.css">
 <title>Admin Panel</title>
 </head>
 <body>

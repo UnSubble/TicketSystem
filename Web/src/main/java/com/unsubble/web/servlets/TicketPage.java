@@ -76,9 +76,9 @@ public class TicketPage extends HttpServlet {
 			op = true;
 		}
 		if (!op && params.containsKey("continueTicket")) {
-			performTicket(x -> {
-				if (x.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
-					req.getSession().setAttribute("ticket", x);
+			performTicket(t -> {
+				if (t.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
+					req.getSession().setAttribute("ticket", t);
 					try {
 						req.getRequestDispatcher("section.jsp").forward(req, resp);
 					} catch (ServletException | IOException e) {

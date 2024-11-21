@@ -8,6 +8,8 @@
 <title>Insert title here</title>
 <link type="text/css" rel="stylesheet"
 	href="./resource/userProfileStylesheet.css">
+<link type="text/css" rel="stylesheet"
+	href="./resource/closedButtonStylesheet.css">
 </head>
 <body>
 	<div class="container">
@@ -35,13 +37,15 @@
 								Konu: ${ticket.title}
 								<button class="inner-btn" name="deleteTicket"
 									value="${ticket.id}">Sil</button>
-								<button class="inner-btn" name="continueTicket"
-									value="${ticket.id}">Devam Et</button> </span>
+								<button
+									class="inner-btn ${ticket.closed ? 'closed-ticket-btn' : ''}"
+									disabled="${ticket.closed ? 'disabled' : 'enabled'}"
+									name="continueTicket" value="${ticket.id}">Devam Et</button> </span>
 						</div>
 					</c:forEach>
 				</div>
 			</form>
-			
+
 			<button class="add-ticket-btn">Yeni Ticket Ekle</button>
 		</div>
 		<form id="logout-form" action="/Web/loginPage.jsp" method="POST">

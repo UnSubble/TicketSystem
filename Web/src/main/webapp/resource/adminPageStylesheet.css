@@ -128,11 +128,3 @@ body {
 .resolved-btn:hover {
     background-color: #27ae60;
 }
-
-.closed-ticket-btn {
-	background-color: #9b9b9b;
-}
-
-.closed-ticket-btn:hover {
-	background-color: #7d7d7d;
-}

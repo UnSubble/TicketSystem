@@ -30,6 +30,7 @@ public class AddItemToTicket extends HttpServlet {
 			SupportItem item = new SupportItem(ticket.getTitle(), content, userController.getUser(username));
 			ticketController.addItemToTicket(ticket, item);
 		}
+		req.getRequestDispatcher("section.jsp").forward(req, resp);
 	}
 
 	
