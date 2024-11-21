@@ -37,13 +37,16 @@
 									value="${ticket.id}">Sil</button>
 								<button
 									class="ticket-btn close-btn ${ticket.closed ? 'closed-ticket-btn' : ''}"
-									name="closeTicket" value="${ticket.id}">Kapat</button>
+									name="closeTicket" ${ticket.closed ? 'disabled' : ''}
+									value="${ticket.id}">Kapat</button>
 								<button
 									class="ticket-btn continue-btn ${ticket.closed ? 'closed-ticket-btn' : ''}"
-									name="continueTicket" value="${ticket.id}">Devam Et</button>
+									name="continueTicket" ${ticket.closed ? 'disabled' : ''}
+									value="${ticket.id}">Devam Et</button>
 								<button
 									class="ticket-btn resolved-btn ${ticket.solved or ticket.closed ? 'closed-ticket-btn' : ''}"
-									name="resolveTicket" value="${ticket.id}">Çözüldü</button>
+									name="resolveTicket" ${ticket.closed ? 'disabled' : ''}
+									value="${ticket.id}">Çözüldü</button>
 							</div>
 
 						</div>

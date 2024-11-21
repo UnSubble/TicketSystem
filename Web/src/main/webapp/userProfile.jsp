@@ -39,7 +39,7 @@
 									value="${ticket.id}">Sil</button>
 								<button
 									class="inner-btn ${ticket.closed ? 'closed-ticket-btn' : ''}"
-									disabled="${ticket.closed ? 'disabled' : 'enabled'}"
+									${ticket.closed ? 'disabled' : ''}
 									name="continueTicket" value="${ticket.id}">Devam Et</button> </span>
 						</div>
 					</c:forEach>

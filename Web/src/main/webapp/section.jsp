@@ -44,7 +44,7 @@
 					placeholder="Yorumunuzu buraya yazın..." required></textarea>
 				<button type="submit"
 					class="${ticket.closed ? 'closed-ticket-btn' : ''}"
-					disabled="${ticket.closed ? 'disabled' : 'enabled'}">Gönder</button>
+					${ticket.closed ? 'disabled' : ''}>Gönder</button>
 			</form>
 		</div>
 	</div>

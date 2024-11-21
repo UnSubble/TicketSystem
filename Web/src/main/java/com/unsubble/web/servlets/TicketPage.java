@@ -29,7 +29,7 @@ public class TicketPage extends HttpServlet {
 		for (String idStr : params) {
 			int id = Integer.parseInt(idStr);
 			Optional<Ticket> optTicket = ticketController.getTicketById(id);
-			if (optTicket.isEmpty()) {
+			if (optTicket.isEmpty() || optTicket.get().isClosed()) {
 				Logger logger = LogManager.getLogger();
 				logger.log(Level.ERROR, "No tickets were found with the given ID.");
 				continue;
@@ -83,7 +83,7 @@ public class TicketPage extends HttpServlet {
 						req.getRequestDispatcher("section.jsp").forward(req, resp);
 					} catch (ServletException | IOException e) {
 						Logger logger = LogManager.getLogger();
-						logger.log(Level.ERROR, "An error occurred while redirecting to the ticket");
+						logger.log(Level.ERROR, "An error occurred while redirecting to the ticket.");
 						resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 					}
 				}
