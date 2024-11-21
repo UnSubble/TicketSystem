@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/ticket")
 public class TicketPage extends HttpServlet {
-	
+
 	private void performTicket(Consumer<Ticket> job, String... params) throws ServletException, IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		for (String idStr : params) {
@@ -37,8 +37,9 @@ public class TicketPage extends HttpServlet {
 			job.accept(optTicket.get());
 		}
 	}
-	
-	private void resetAttributes(HttpServletRequest req, HttpServletResponse resp, String usernameOnReq) throws IOException {
+
+	private void resetAttributes(HttpServletRequest req, HttpServletResponse resp, String usernameOnReq)
+			throws IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		AdminController adminController = AdminController.getInstance();
 		if (adminController.isAdmin(usernameOnReq)) {
@@ -69,10 +70,15 @@ public class TicketPage extends HttpServlet {
 			resetAttributes(req, resp, usernameOnReq);
 			op = true;
 		}
+		if (adminController.isAdmin(usernameOnReq) && params.containsKey("resolveTicket")) {
+			performTicket(t -> t.setSolved(true), params.get("resolveTicket"));
+			resetAttributes(req, resp, usernameOnReq);
+			op = true;
+		}
 		if (!op && params.containsKey("continueTicket")) {
 			performTicket(x -> {
 				if (x.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
-					req.setAttribute("ticket", x);
+					req.getSession().setAttribute("ticket", x);
 					try {
 						req.getRequestDispatcher("section.jsp").forward(req, resp);
 					} catch (ServletException | IOException e) {
@@ -84,5 +90,5 @@ public class TicketPage extends HttpServlet {
 			}, params.get("continueTicket"));
 		}
 	}
-	
+
 }

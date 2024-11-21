@@ -121,6 +121,14 @@ body {
 	background-color: #2980b9;
 }
 
+.resolved-btn {
+    background-color: #2ecc71;
+}
+
+.resolved-btn:hover {
+    background-color: #27ae60;
+}
+
 .closed-ticket-btn {
 	background-color: #9b9b9b;
 }
