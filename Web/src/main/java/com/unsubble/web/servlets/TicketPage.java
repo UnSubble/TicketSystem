@@ -14,6 +14,7 @@ import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.utils.ObjectsUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -102,13 +103,9 @@ public class TicketPage extends HttpServlet {
 		} else if (!op && params.containsKey("createTicket")) {
 			if (!"true".equals(params.get("createTicket")[0]))
 				return;
-			Ticket ticket = (Ticket)req.getSession().getAttribute("ticket");
-			if (ticket == null) {
-				resp.sendRedirect("/Web/auth");
-				return;
-			} else {
-				req.getRequestDispatcher("section.jsp").forward(req, resp);
-			}
+			Ticket ticket = (Ticket) req.getSession().getAttribute("ticket");
+			ObjectsUtil.ifNotNullThenCatched(ticket, t -> resp.sendRedirect("/Web/auth"),
+					t -> req.getRequestDispatcher("section.jsp").forward(req, resp));
 		}
 	}
 

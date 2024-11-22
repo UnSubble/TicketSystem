@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.unsubble.web.utils.ConsumerWithThrows;
+import com.unsubble.web.utils.ObjectsUtil;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,7 +23,7 @@ public class Logout extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		Object usernameObj = session.getAttribute("username");
-		if (usernameObj != null) {
+		ObjectsUtil.ifNotNullThenCatched(usernameObj, () -> {
 			Enumeration<String> enumerate = session.getAttributeNames();
 			while (enumerate.hasMoreElements()) {
 				session.removeAttribute(enumerate.nextElement());
@@ -28,7 +31,7 @@ public class Logout extends HttpServlet {
 			session.invalidate();
 			Logger logger = LogManager.getLogger();
 			logger.log(Level.INFO, "%s has logged out.".formatted(usernameObj));
-		}
+		}, null);
 		resp.sendRedirect("/Web/auth");
 	}
 }

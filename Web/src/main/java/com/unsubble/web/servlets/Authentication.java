@@ -7,6 +7,7 @@ import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.utils.ObjectsUtil;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -23,15 +24,13 @@ public class Authentication extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		Object usernameObj = session.getAttribute("username");
-		if (usernameObj != null) {
+		ObjectsUtil.ifNotNullThenCatched(usernameObj, () -> {
 			session.setMaxInactiveInterval(60 * 60); // An hour
 			if (AdminController.getInstance().isAdmin(usernameObj.toString()))
 				req.getRequestDispatcher("admin.jsp").forward(req, resp);
 			else
 				req.getRequestDispatcher("userProfile.jsp").forward(req, resp);
-		} else {
-			req.getRequestDispatcher("loginPage.jsp").forward(req, resp);
-		}
+		}, () -> req.getRequestDispatcher("loginPage.jsp").forward(req, resp));
 	}
 
 	@Override
