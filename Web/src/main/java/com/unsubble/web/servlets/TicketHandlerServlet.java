@@ -10,10 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.unsubble.backend.model.Ticket;
-import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
-import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.managers.AttributeManager;
 import com.unsubble.web.utils.ObjectsUtil;
 
 import jakarta.servlet.ServletException;
@@ -21,6 +20,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = "/ticket")
 public class TicketHandlerServlet extends HttpServlet {
@@ -45,31 +45,17 @@ public class TicketHandlerServlet extends HttpServlet {
 		ticketController.updateTicket(ticket);
 	}
 
-	private void resetAttributes(HttpServletRequest req, HttpServletResponse resp, String usernameOnReq)
-			throws IOException {
-		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
-		AdminController adminController = AdminController.getInstance();
-		if (adminController.isAdmin(usernameOnReq)) {
-			req.getSession().setAttribute("listOfTickets", ticketController.getAllTickets());
-			resp.sendRedirect("/Web/adminPage.jsp");
-		} else {
-			UserRepositoryController userController = UserRepositoryController.getInstance();
-			User user = userController.getUser(usernameOnReq);
-			req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(user));
-			resp.sendRedirect("/Web/userProfilePage.jsp");
-		}
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Map<String, String[]> params = req.getParameterMap();
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		AdminController adminController = AdminController.getInstance();
-		String usernameOnReq = req.getSession().getAttribute("username").toString();
+		HttpSession session = req.getSession();
+		String usernameOnReq = session.getAttribute("username").toString();
 		boolean op = false;
 		if (params.containsKey("deleteTicket")) {
 			performTicket(ticketController::removeTicket, params.get("deleteTicket"));
-			resetAttributes(req, resp, usernameOnReq);
+			AttributeManager.setTicketListAsAttribute(usernameOnReq, session, resp);
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("closeTicket")) {
@@ -77,7 +63,7 @@ public class TicketHandlerServlet extends HttpServlet {
 				t.setClosed(true);
 				saveTicket(t);
 			}, params.get("closeTicket"));
-			resetAttributes(req, resp, usernameOnReq);
+			AttributeManager.setTicketListAsAttribute(usernameOnReq, session, resp);
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("resolveTicket")) {
@@ -85,7 +71,7 @@ public class TicketHandlerServlet extends HttpServlet {
 				t.setSolved(true);
 				saveTicket(t);
 			}, params.get("resolveTicket"));
-			resetAttributes(req, resp, usernameOnReq);
+			AttributeManager.setTicketListAsAttribute(usernameOnReq, session, resp);
 			op = true;
 		}
 		if (!op && params.containsKey("continueTicket")) {

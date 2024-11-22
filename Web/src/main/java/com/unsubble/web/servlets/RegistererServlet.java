@@ -28,8 +28,8 @@ public class RegistererServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		Logger logger = LogManager.getLogger();
 		if (controller.isTaken(username)) {
-			req.getServletContext().setAttribute("error", 2);
-			resp.sendRedirect("/Web/auth");
+			req.setAttribute("error", 2);
+			req.getRequestDispatcher("loginPage.jsp").forward(req, resp);
 		} else {
 			Date now = new Date();
 			User newUser = new User(username, password, now, now);

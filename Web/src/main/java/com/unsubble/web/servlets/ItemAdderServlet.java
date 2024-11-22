@@ -7,6 +7,7 @@ import com.unsubble.backend.model.Ticket;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.managers.AttributeManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,13 +34,7 @@ public class ItemAdderServlet extends HttpServlet {
 				content = content.substring(title.length()).trim();
 				ticket.setTitle(title);
 				ticket.setContent(content);
-				if (AdminController.getInstance().isAdmin(username)) {
-					session.setAttribute("listOfTickets", ticketController.getAllTickets());
-				} else {
-					session.setAttribute("ticketsBelongsToUser",
-							ticketController.getAllTicketsByUser(ticket.getUser()));
-				}
-				resp.sendRedirect("/Web/auth");
+				AttributeManager.setTicketListAsAttribute(ticket.getUser().getName(), session, resp);
 				return;
 			} else {
 				SupportItem item = new SupportItem(ticket.getTitle(), content, userController.getUser(username));

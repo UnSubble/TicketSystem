@@ -16,14 +16,14 @@
 		<div class="container">
 			<div class="header">
 				<h1>
-					Hoş geldiniz, <span id="user-name">Kullanıcı Adı</span>
+					Hoş geldiniz, <span id="user-name">${username}</span>
 				</h1>
 			</div>
 
 			<div class="user-info">
 				<h3>Kullanıcı Bilgileri</h3>
 				<p>
-					<strong>Ad:</strong> <span id="user-name">Kullanıcı Adı</span>
+					<strong>Ad:</strong> <span id="user-name">${username}</span>
 				</p>
 			</div>
 

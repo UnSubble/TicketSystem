@@ -9,7 +9,6 @@ import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
 import com.unsubble.web.utils.ObjectsUtil;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,10 +26,11 @@ public class AuthenticationServlet extends HttpServlet {
 		Object usernameObj = session.getAttribute("username");
 		ObjectsUtil.ifNotNullThenCatched(usernameObj, () -> {
 			session.setMaxInactiveInterval(60 * 60); // An hour
-			if (AdminController.getInstance().isAdmin(usernameObj.toString()))
+			if (AdminController.getInstance().isAdmin(usernameObj.toString())) {
 				req.getRequestDispatcher("adminPage.jsp").forward(req, resp);
-			else
+			} else {
 				req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
+			}
 		}, () -> req.getRequestDispatcher("loginPage.jsp").forward(req, resp));
 	}
 
@@ -50,12 +50,11 @@ public class AuthenticationServlet extends HttpServlet {
 			} else {
 				TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 				session.setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
-				RequestDispatcher dispatcher = req.getRequestDispatcher("userProfilePage.jsp");
-				dispatcher.forward(req, resp);
+				req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
 			}
 		} else {
-			req.getServletContext().setAttribute("error", 1);
-			resp.sendRedirect("/Web/auth");
+			req.setAttribute("error", 1);
+			req.getRequestDispatcher("loginPage.jsp").forward(req, resp);
 		}
 	}
 
