@@ -16,7 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = "/addItemToTicket")
-public class AddItemToTicket extends HttpServlet {
+public class ItemAdderServlet extends HttpServlet {
+	private static final long serialVersionUID = 20241123L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,7 +28,7 @@ public class AddItemToTicket extends HttpServlet {
 		UserRepositoryController userController = UserRepositoryController.getInstance();
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		if (AdminController.getInstance().isAdmin(username) || ticket.getUser().getName().equals(username)) {
-			if (ticket.getContent().isEmpty() || ticket.getTitle().isEmpty()) {
+			if (ticket.getContent().isEmpty() && ticket.getTitle().isEmpty()) {
 				String title = content.split("\n")[0];
 				content = content.substring(title.length()).trim();
 				ticket.setTitle(title);
@@ -45,7 +46,7 @@ public class AddItemToTicket extends HttpServlet {
 				ticketController.addItemToTicket(ticket, item);
 			}
 		}
-		req.getRequestDispatcher("section.jsp").forward(req, resp);
+		req.getRequestDispatcher("sectionPage.jsp").forward(req, resp);
 	}
 
 }

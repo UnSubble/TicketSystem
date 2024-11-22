@@ -37,6 +37,6 @@
 		</form>
 	</div>
 
-	<script src="./resource/loginpageswitcher.js"></script>
+	<script src="./resource/loginPageSwitcher.js"></script>
 </body>
 </html>

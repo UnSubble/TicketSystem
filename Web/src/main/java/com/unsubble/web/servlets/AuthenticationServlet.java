@@ -18,7 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = "/auth")
-public class Authentication extends HttpServlet {
+public class AuthenticationServlet extends HttpServlet {
+	private static final long serialVersionUID = 20241123L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,9 +28,9 @@ public class Authentication extends HttpServlet {
 		ObjectsUtil.ifNotNullThenCatched(usernameObj, () -> {
 			session.setMaxInactiveInterval(60 * 60); // An hour
 			if (AdminController.getInstance().isAdmin(usernameObj.toString()))
-				req.getRequestDispatcher("admin.jsp").forward(req, resp);
+				req.getRequestDispatcher("adminPage.jsp").forward(req, resp);
 			else
-				req.getRequestDispatcher("userProfile.jsp").forward(req, resp);
+				req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
 		}, () -> req.getRequestDispatcher("loginPage.jsp").forward(req, resp));
 	}
 
@@ -49,7 +50,7 @@ public class Authentication extends HttpServlet {
 			} else {
 				TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 				session.setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
-				RequestDispatcher dispatcher = req.getRequestDispatcher("userProfile.jsp");
+				RequestDispatcher dispatcher = req.getRequestDispatcher("userProfilePage.jsp");
 				dispatcher.forward(req, resp);
 			}
 		} else {

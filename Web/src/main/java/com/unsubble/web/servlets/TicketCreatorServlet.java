@@ -20,7 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/section")
-public class AddNewTicket extends HttpServlet {
+public class TicketCreatorServlet extends HttpServlet {
+	private static final long serialVersionUID = 20241123L;
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,8 +32,8 @@ public class AddNewTicket extends HttpServlet {
 		if (usernameObj != null && !adminController.isAdmin(usernameObj.toString())) {
 			String username = usernameObj.toString();
 			UserRepositoryController userController = UserRepositoryController.getInstance();
-			User user = userController.getUser(username);
 			TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+			User user = userController.getUser(username);
 			Ticket ticket = new Ticket(user, "", "", Priority.LOW);
 			if (ticketController.addTicket(ticket)) {
 				req.getSession().setAttribute("ticket", ticket);
@@ -40,10 +41,10 @@ public class AddNewTicket extends HttpServlet {
 			} else {
 				Logger logger = LogManager.getLogger();
 				logger.log(Level.ERROR, "Something went wrong while creating the ticket.");
-				req.getRequestDispatcher("userProfile.jsp").forward(req, resp);
+				req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
 			}
 		} else {
-			req.getRequestDispatcher("userProfile.jsp").forward(req, resp);
+			req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
 		}
 	}
 }

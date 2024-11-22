@@ -23,14 +23,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/ticket")
-public class TicketPage extends HttpServlet {
+public class TicketHandlerServlet extends HttpServlet {
+	private static final long serialVersionUID = 20241123L;
 
 	private void performTicket(Consumer<Ticket> job, String... params) throws ServletException, IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		for (String idStr : params) {
 			int id = Integer.parseInt(idStr);
 			Optional<Ticket> optTicket = ticketController.getTicketById(id);
-			if (optTicket.isEmpty() || optTicket.get().isClosed()) {
+			if (optTicket.isEmpty()) {
 				Logger logger = LogManager.getLogger();
 				logger.log(Level.ERROR, "No tickets were found with the given ID.");
 				continue;
@@ -50,12 +51,12 @@ public class TicketPage extends HttpServlet {
 		AdminController adminController = AdminController.getInstance();
 		if (adminController.isAdmin(usernameOnReq)) {
 			req.getSession().setAttribute("listOfTickets", ticketController.getAllTickets());
-			resp.sendRedirect("/Web/admin.jsp");
+			resp.sendRedirect("/Web/adminPage.jsp");
 		} else {
 			UserRepositoryController userController = UserRepositoryController.getInstance();
 			User user = userController.getUser(usernameOnReq);
 			req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(user));
-			resp.sendRedirect("/Web/userProfile.jsp");
+			resp.sendRedirect("/Web/userProfilePage.jsp");
 		}
 	}
 
@@ -92,7 +93,7 @@ public class TicketPage extends HttpServlet {
 				if (t.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
 					req.getSession().setAttribute("ticket", t);
 					try {
-						req.getRequestDispatcher("section.jsp").forward(req, resp);
+						req.getRequestDispatcher("sectionPage.jsp").forward(req, resp);
 					} catch (ServletException | IOException e) {
 						Logger logger = LogManager.getLogger();
 						logger.log(Level.ERROR, "An error occurred while redirecting to the ticket.");
@@ -104,8 +105,9 @@ public class TicketPage extends HttpServlet {
 			if (!"true".equals(params.get("createTicket")[0]))
 				return;
 			Ticket ticket = (Ticket) req.getSession().getAttribute("ticket");
-			ObjectsUtil.ifNotNullThenCatched(ticket, t -> resp.sendRedirect("/Web/auth"),
-					t -> req.getRequestDispatcher("section.jsp").forward(req, resp));
+			ObjectsUtil.ifNotNullThenCatched(ticket,
+					t -> req.getRequestDispatcher("sectionPage.jsp").forward(req, resp),
+					t -> resp.sendRedirect("/Web/auth"));
 		}
 	}
 

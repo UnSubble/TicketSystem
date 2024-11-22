@@ -18,7 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/register")
-public class RegisterUser extends HttpServlet {
+public class RegistererServlet extends HttpServlet {
+	private static final long serialVersionUID = 20241123L;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
