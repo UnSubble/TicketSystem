@@ -48,7 +48,7 @@
 
 			<button class="add-ticket-btn">Yeni Ticket Ekle</button>
 		</div>
-		<form id="logout-form" action="/Web/loginPage.jsp" method="POST">
+		<form id="logout-form" action="/Web/logout" method="GET">
 			<button class="logout-btn">Çıkış Yap</button>
 		</form>
 	</div>

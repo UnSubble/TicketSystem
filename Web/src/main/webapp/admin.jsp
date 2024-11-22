@@ -15,14 +15,16 @@
 	<div class="admin-container">
 		<header class="admin-header">
 			<h1>Admin Panel</h1>
-			<button class="logout-btn">Çıkış Yap</button>
+			<form action="/Web/logout" method="GET">
+				<button class="logout-btn">Çıkış Yap</button>
+			</form>
 		</header>
 		<main class="admin-content">
 			<h2>Gelen Ticketlar</h2>
 			<form action="/Web/ticket" method="GET">
 				<div class="tickets">
 					<c:forEach var="ticket" items="${listOfTickets}">
-						<div class="ticket">
+						<div class="ticket ${ticket.priority.toString().toLowerCase() }">
 							<h3>
 								Konu:
 								<c:out value="${ticket.title}" />
