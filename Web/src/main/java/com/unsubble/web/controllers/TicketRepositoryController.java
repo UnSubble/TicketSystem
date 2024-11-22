@@ -49,6 +49,10 @@ public class TicketRepositoryController {
 		ticketRepo.addItemToTicket(ticket, item);
 		return true;
 	}
+	
+	public void updateTicket(Ticket ticket) {
+		ticketRepo.updateTicket(ticket);
+	}
 
     public static TicketRepositoryController getInstance() {
     	return INSTANCE;

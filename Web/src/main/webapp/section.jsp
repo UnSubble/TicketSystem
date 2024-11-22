@@ -40,7 +40,7 @@
 			<h3>Yorum Yap</h3>
 			<form action="/Web/addItemToTicket" method="post">
 				<textarea name="commentContent"
-					disabled="${ticket.closed ? 'disabled' : 'enabled'}"
+					${ticket.closed ? 'disabled' : ''}
 					placeholder="Yorumunuzu buraya yazın..." required></textarea>
 				<button type="submit"
 					class="${ticket.closed ? 'closed-ticket-btn' : ''}"

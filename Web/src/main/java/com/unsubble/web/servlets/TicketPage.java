@@ -38,6 +38,11 @@ public class TicketPage extends HttpServlet {
 		}
 	}
 
+	private void saveTicket(Ticket ticket) {
+		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+		ticketController.updateTicket(ticket);
+	}
+
 	private void resetAttributes(HttpServletRequest req, HttpServletResponse resp, String usernameOnReq)
 			throws IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
@@ -66,12 +71,18 @@ public class TicketPage extends HttpServlet {
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("closeTicket")) {
-			performTicket(t -> t.setClosed(true), params.get("closeTicket"));
+			performTicket(t -> {
+				t.setClosed(true);
+				saveTicket(t);
+			}, params.get("closeTicket"));
 			resetAttributes(req, resp, usernameOnReq);
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("resolveTicket")) {
-			performTicket(t -> t.setSolved(true), params.get("resolveTicket"));
+			performTicket(t -> {
+				t.setSolved(true);
+				saveTicket(t);
+			}, params.get("resolveTicket"));
 			resetAttributes(req, resp, usernameOnReq);
 			op = true;
 		}
@@ -88,6 +99,16 @@ public class TicketPage extends HttpServlet {
 					}
 				}
 			}, params.get("continueTicket"));
+		} else if (!op && params.containsKey("createTicket")) {
+			if (!"true".equals(params.get("createTicket")[0]))
+				return;
+			Ticket ticket = (Ticket)req.getSession().getAttribute("ticket");
+			if (ticket == null) {
+				resp.sendRedirect("/Web/auth");
+				return;
+			} else {
+				req.getRequestDispatcher("section.jsp").forward(req, resp);
+			}
 		}
 	}
 

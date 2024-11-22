@@ -23,15 +23,29 @@ public class AddItemToTicket extends HttpServlet {
 		String content = req.getParameter("commentContent");
 		HttpSession session = req.getSession();
 		String username = session.getAttribute("username").toString();
-		Ticket ticket = (Ticket)session.getAttribute("ticket");
+		Ticket ticket = (Ticket) session.getAttribute("ticket");
 		UserRepositoryController userController = UserRepositoryController.getInstance();
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		if (AdminController.getInstance().isAdmin(username) || ticket.getUser().getName().equals(username)) {
-			SupportItem item = new SupportItem(ticket.getTitle(), content, userController.getUser(username));
-			ticketController.addItemToTicket(ticket, item);
+			if (ticket.getContent().isEmpty() || ticket.getTitle().isEmpty()) {
+				String title = content.split("\n")[0];
+				content = content.substring(title.length()).trim();
+				ticket.setTitle(title);
+				ticket.setContent(content);
+				if (AdminController.getInstance().isAdmin(username)) {
+					session.setAttribute("listOfTickets", ticketController.getAllTickets());
+				} else {
+					session.setAttribute("ticketsBelongsToUser",
+							ticketController.getAllTicketsByUser(ticket.getUser()));
+				}
+				resp.sendRedirect("/Web/auth");
+				return;
+			} else {
+				SupportItem item = new SupportItem(ticket.getTitle(), content, userController.getUser(username));
+				ticketController.addItemToTicket(ticket, item);
+			}
 		}
 		req.getRequestDispatcher("section.jsp").forward(req, resp);
 	}
 
-	
 }

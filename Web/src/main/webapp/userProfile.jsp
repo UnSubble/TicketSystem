@@ -45,8 +45,9 @@
 					</c:forEach>
 				</div>
 			</form>
-
-			<button class="add-ticket-btn">Yeni Ticket Ekle</button>
+			<form action="/Web/section" method="POST">
+			<button class="add-ticket-btn" name="newTicket" value="true">Yeni Ticket Ekle</button>
+			</form>
 		</div>
 		<form id="logout-form" action="/Web/logout" method="GET">
 			<button class="logout-btn">Çıkış Yap</button>
