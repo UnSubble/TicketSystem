@@ -14,13 +14,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = "/auth")
 public class Authentication extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.getRequestDispatcher("loginPage.jsp").forward(req, resp);
+		HttpSession session = req.getSession();
+		Object usernameObj = session.getAttribute("username");
+		if (usernameObj != null) {
+			session.setMaxInactiveInterval(60 * 60); // An hour
+			if (AdminController.getInstance().isAdmin(usernameObj.toString()))
+				req.getRequestDispatcher("admin.jsp").forward(req, resp);
+			else
+				req.getRequestDispatcher("userProfile.jsp").forward(req, resp);
+		} else {
+			req.getRequestDispatcher("loginPage.jsp").forward(req, resp);
+		}
 	}
 
 	@Override
@@ -28,16 +39,17 @@ public class Authentication extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		UserRepositoryController userController = UserRepositoryController.getInstance();
+		HttpSession session = req.getSession();
 		boolean isMatch = userController.matches(username, password);
 		if (isMatch) {
 			User targetUser = userController.getUser(username);
 			targetUser.setLastLogin(new Date());
-			req.getSession().setAttribute("username", username);
+			session.setAttribute("username", username);
 			if (AdminController.getInstance().isAdmin(username)) {
 				req.getRequestDispatcher("admin").forward(req, resp);
 			} else {
 				TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
-				req.getSession().setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
+				session.setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
 				RequestDispatcher dispatcher = req.getRequestDispatcher("userProfile.jsp");
 				dispatcher.forward(req, resp);
 			}

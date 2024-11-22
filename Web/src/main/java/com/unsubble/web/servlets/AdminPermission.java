@@ -36,7 +36,12 @@ public class AdminPermission extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		redirectAdmin(req, resp);
+		Object usernameObj = req.getSession().getAttribute("username");
+		if (usernameObj != null && AdminController.getInstance().isAdmin(usernameObj.toString())) {
+			req.getRequestDispatcher("admin.jsp").forward(req, resp);
+		} else {
+			redirectAdmin(req, resp);
+		}	
 	}
 
 	@Override
