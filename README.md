@@ -91,4 +91,4 @@ Contributions are welcome! To contribute:
 
 ## License
 
-This project is licensed under the __[MIT License](#LICENSE)__.
+This project is licensed under the __[MIT License](./LICENSE)__.
