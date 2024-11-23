@@ -33,11 +33,12 @@ public class AdminController {
 	}
 
 	private void putTableIfExists(String username, UserAdapter user) {
-		if (!checkPrivelegedUsers(username)) {
+		if (!checkPrivilegedUsers(username)) {
 			return;
 		}
 		timer.purge();
 		if (table.isEmpty()) {
+			timer = new Timer();
 			timer.scheduleAtFixedRate(new TimerTask() {
 				@Override
 				public void run() {
@@ -51,7 +52,7 @@ public class AdminController {
 		table.put(username, user);	
 	}
 	
-	private boolean checkPrivelegedUsers(String username) {
+	private boolean checkPrivilegedUsers(String username) {
 		Path p = Path.of("/home/oem/Desktop/projects/SupportAndTicketingSystem/privilegedUserList.txt");
 		if (Files.notExists(p))
 			return false;
