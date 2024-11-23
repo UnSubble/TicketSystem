@@ -42,7 +42,7 @@ Path: `src/main/java/com/unsubble/backend`
 ### Steps
 1. Clone the repository:
 ```bash
-   git clone https://github.com/your-repo/support-system.git
+   git clone https://github.com/your-repo/TicketSystem.git
 ```
 
 2. Import the project into your IDE (e.g., IntelliJ IDEA, Eclipse).
