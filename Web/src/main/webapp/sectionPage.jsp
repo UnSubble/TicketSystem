@@ -71,6 +71,9 @@
 		const priority = document.getElementById('priority-selector');
 		const comment = document.getElementById('comment-area');
 		function sendQuery(ticketId) {
+			if ((title != null && title.value.trim() === '') || comment.value.trim() === '') {
+				return;
+			}
 			const formData = {
 				title: title ? title.value : null,
 				priority: priority ? priority.value : null,
