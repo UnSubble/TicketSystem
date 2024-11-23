@@ -29,6 +29,8 @@ public class ItemAdderServlet extends HttpServlet {
 		ticket.setTitle(title);
 		ticket.setContent(content);
 		ticket.setPriority(priority);
+		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
+		ticketController.updateTicket(ticket);
 	}
 
 	@Override
