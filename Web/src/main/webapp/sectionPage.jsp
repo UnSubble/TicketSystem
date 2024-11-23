@@ -39,34 +39,54 @@
 				</div>
 			</c:forEach>
 		</div>
-		<form action="/Web/addItemToTicket" method="post">
-			<c:if test="${ticket.title.isEmpty()}"> <%-- TODO --%>
-				<h3>Başlık:</h3>
-				<input type="hidden" name="ticketId" value="${ticket.id}" />
-				<input type="text" name="title" value="${ticket.title}"
-					class="title-input" required />
-				<div class="priority-section">
-					<h3>Öncelik Seçimi</h3>
-					<input type="hidden" name="ticketId" value="${ticket.id}" /> <select
-						name="priority" class="priority-select"
-						${ticket.closed ? 'disabled' : ''}>
-						<option value="LOW" selected>LOW</option>
-						<option value="NORMAL">NORMAL</option>
-						<option value="HIGH">HIGH</option>
-						<option value="URGENT">URGENT</option>
-						<option value="CRITICAL">CRITICAL</option>
-					</select>
-				</div>
-			</c:if>
-			<div class="comment-section">
-				<h3>Yorum Yap</h3>
-				<textarea name="commentContent" ${ticket.closed ? 'disabled' : ''}
-					placeholder="Yorumunuzu buraya yazın..." required></textarea>
-				<button type="submit"
-					class="${ticket.closed ? 'closed-ticket-btn' : ''}"
-					${ticket.closed ? 'disabled' : ''}>Gönder</button>
+		<c:if test="${ticket.title.isEmpty()}">
+			<h3>Başlık:</h3>
+			<input id="title-area" type="text" name="title"
+				value="${ticket.title}" class="title-input" required />
+			<div class="priority-section">
+				<h3>Öncelik Seçimi</h3>
+				<select id="priority-selector" name="priority"
+					class="priority-select" ${ticket.closed ? 'disabled' : ''}>
+					<option value="LOW" selected>LOW</option>
+					<option value="NORMAL">NORMAL</option>
+					<option value="HIGH">HIGH</option>
+					<option value="URGENT">URGENT</option>
+					<option value="CRITICAL">CRITICAL</option>
+				</select>
 			</div>
-		</form>
+		</c:if>
+		<div class="comment-section">
+			<h3>Yorum Yap</h3>
+			<textarea id="comment-area" name="commentContent"
+				${ticket.closed ? 'disabled' : ''}
+				placeholder="Yorumunuzu buraya yazın..." required></textarea>
+			<button onclick="sendQuery(${ticket.id})"
+				class="${ticket.closed ? 'closed-ticket-btn' : ''}"
+				${ticket.closed ? 'disabled' : ''}>Gönder</button>
+		</div>
 	</div>
+	<script src="./resource/jquery-3.7.1.min.js"> </script>
+	<script type="text/javascript">
+		const title = document.getElementById('title-area');
+		const priority = document.getElementById('priority-selector');
+		const comment = document.getElementById('comment-area');
+		function sendQuery(ticketId) {
+			const formData = {
+				title: title ? title.value : null,
+				priority: priority ? priority.value : null,
+				commentContent: comment ? comment.value : null,
+				ticketId: ticketId
+			};
+			$.ajax({
+				url: '/Web/addItemToTicket',
+				method: 'POST',
+				data: formData,
+				success: (text) => {
+					comment.value = '';
+					location.reload();
+				}
+			});
+		}
+	</script>
 </body>
 </html>
