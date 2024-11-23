@@ -128,3 +128,47 @@ body {
 .resolved-btn:hover {
     background-color: #27ae60;
 }
+
+.ticket.low {
+    border-left: 5px solid #2ecc71; 
+    background-color: #eafaf1;
+}
+
+.ticket.normal {
+    border-left: 5px solid #3498db; 
+    background-color: #ebf5fb;
+}
+
+.ticket.high {
+    border-left: 5px solid #f39c12;
+    background-color: #fef5e7;
+}
+
+.ticket.urgent {
+    border-left: 5px solid #e74c3c; 
+    background-color: #fdecea;
+}
+
+.ticket.critical {
+    border-left: 5px solid #8e44ad;
+    background-color: #f4eaf9;
+}
+
+.priority-indicator {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.priority-indicator .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ddd; 
+    border: 1px solid #aaa;
+}
+
+.priority-indicator .dot.filled {
+    background-color: #3498db; 
+}
+

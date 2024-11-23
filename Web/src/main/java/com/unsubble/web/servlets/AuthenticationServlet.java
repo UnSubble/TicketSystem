@@ -5,8 +5,8 @@ import java.util.Date;
 
 import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
-import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.managers.AttributeManager;
 import com.unsubble.web.utils.ObjectsUtil;
 
 import jakarta.servlet.ServletException;
@@ -45,13 +45,8 @@ public class AuthenticationServlet extends HttpServlet {
 			User targetUser = userController.getUser(username);
 			targetUser.setLastLogin(new Date());
 			session.setAttribute("username", username);
-			if (AdminController.getInstance().isAdmin(username)) {
-				req.getRequestDispatcher("admin").forward(req, resp);
-			} else {
-				TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
-				session.setAttribute("ticketsBelongsToUser", ticketController.getAllTicketsByUser(targetUser));
-				req.getRequestDispatcher("userProfilePage.jsp").forward(req, resp);
-			}
+			session.setAttribute("user", targetUser);
+			AttributeManager.setTicketListAsAttribute(username, session, resp);
 		} else {
 			req.setAttribute("error", 1);
 			req.getRequestDispatcher("loginPage.jsp").forward(req, resp);

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.managers.PermissionChecker;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,16 +38,15 @@ public class PermissionCheckerServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Object usernameObj = req.getSession().getAttribute("username");
-		if (usernameObj != null && AdminController.getInstance().isAdmin(usernameObj.toString())) {
-			req.getRequestDispatcher("adminPage.jsp").forward(req, resp);
-		} else {
-			redirectAdmin(req, resp);
-		}	
+		if (PermissionChecker.redirectNonLogins(req, resp))
+			return;
+		redirectAdmin(req, resp);		
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if (PermissionChecker.redirectNonLogins(req, resp))
+			return;
 		redirectAdmin(req, resp);
 	}
 

@@ -24,7 +24,12 @@
 			<form action="/Web/ticket" method="GET">
 				<div class="tickets">
 					<c:forEach var="ticket" items="${listOfTickets}">
-						<div class="ticket ${ticket.priority.toString().toLowerCase() }">
+						<div class="ticket ${ticket.priority.toString().toLowerCase()}">
+							<div class="priority-indicator">
+								<c:forEach begin="1" end="5" var="i">
+									<span class="dot ${i <= ticket.priority.level ? 'filled' : ''}"></span>
+								</c:forEach>
+							</div>
 							<h3>
 								Konu:
 								<c:out value="${ticket.title}" />
@@ -50,7 +55,6 @@
 									name="resolveTicket" ${ticket.closed ? 'disabled' : ''}
 									value="${ticket.id}">Çözüldü</button>
 							</div>
-
 						</div>
 					</c:forEach>
 				</div>

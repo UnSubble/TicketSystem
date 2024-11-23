@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 public class TicketHandlerServlet extends HttpServlet {
 	private static final long serialVersionUID = 20241123L;
 
-	private void performTicket(Consumer<Ticket> job, String... params) throws ServletException, IOException {
+	private void applyMatches(Consumer<Ticket> job, String... params) throws ServletException, IOException {
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		for (String idStr : params) {
 			int id = Integer.parseInt(idStr);
@@ -45,21 +45,20 @@ public class TicketHandlerServlet extends HttpServlet {
 		ticketController.updateTicket(ticket);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	private void performTicket(String usernameOnReq, HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		HttpSession session = req.getSession();
 		Map<String, String[]> params = req.getParameterMap();
 		TicketRepositoryController ticketController = TicketRepositoryController.getInstance();
 		AdminController adminController = AdminController.getInstance();
-		HttpSession session = req.getSession();
-		String usernameOnReq = session.getAttribute("username").toString();
 		boolean op = false;
 		if (params.containsKey("deleteTicket")) {
-			performTicket(ticketController::removeTicket, params.get("deleteTicket"));
+			applyMatches(ticketController::removeTicket, params.get("deleteTicket"));
 			AttributeManager.setTicketListAsAttribute(usernameOnReq, session, resp);
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("closeTicket")) {
-			performTicket(t -> {
+			applyMatches(t -> {
 				t.setClosed(true);
 				saveTicket(t);
 			}, params.get("closeTicket"));
@@ -67,7 +66,7 @@ public class TicketHandlerServlet extends HttpServlet {
 			op = true;
 		}
 		if (adminController.isAdmin(usernameOnReq) && params.containsKey("resolveTicket")) {
-			performTicket(t -> {
+			applyMatches(t -> {
 				t.setSolved(true);
 				saveTicket(t);
 			}, params.get("resolveTicket"));
@@ -75,7 +74,7 @@ public class TicketHandlerServlet extends HttpServlet {
 			op = true;
 		}
 		if (!op && params.containsKey("continueTicket")) {
-			performTicket(t -> {
+			applyMatches(t -> {
 				if (t.getUser().getName().equals(usernameOnReq) || adminController.isAdmin(usernameOnReq)) {
 					req.getSession().setAttribute("ticket", t);
 					try {
@@ -95,6 +94,14 @@ public class TicketHandlerServlet extends HttpServlet {
 					t -> req.getRequestDispatcher("sectionPage.jsp").forward(req, resp),
 					t -> resp.sendRedirect("/Web/auth"));
 		}
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		Object usernameObj = session.getAttribute("username");
+		ObjectsUtil.ifNotNullThenCatched(usernameObj, obj -> performTicket(obj.toString(), req, resp),
+				obj -> resp.sendRedirect("/Web/auth"));
 	}
 
 }

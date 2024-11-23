@@ -14,6 +14,9 @@
 </head>
 <body>
 	<div class="container">
+		<div class="back-button">
+			<a href="/Web/auth" class="back-link">← Geri Dön</a>
+		</div>
 		<div id="ticket-container" class="ticket-box">
 			<h2>Ticket Detayları</h2>
 			<p>
@@ -36,17 +39,34 @@
 				</div>
 			</c:forEach>
 		</div>
-		<div class="comment-section">
-			<h3>Yorum Yap</h3>
-			<form action="/Web/addItemToTicket" method="post">
-				<textarea name="commentContent"
-					${ticket.closed ? 'disabled' : ''}
+		<form action="/Web/addItemToTicket" method="post">
+			<c:if test="${ticket.title.isEmpty()}"> <%-- TODO --%>
+				<h3>Başlık:</h3>
+				<input type="hidden" name="ticketId" value="${ticket.id}" />
+				<input type="text" name="title" value="${ticket.title}"
+					class="title-input" required />
+				<div class="priority-section">
+					<h3>Öncelik Seçimi</h3>
+					<input type="hidden" name="ticketId" value="${ticket.id}" /> <select
+						name="priority" class="priority-select"
+						${ticket.closed ? 'disabled' : ''}>
+						<option value="LOW" selected>LOW</option>
+						<option value="NORMAL">NORMAL</option>
+						<option value="HIGH">HIGH</option>
+						<option value="URGENT">URGENT</option>
+						<option value="CRITICAL">CRITICAL</option>
+					</select>
+				</div>
+			</c:if>
+			<div class="comment-section">
+				<h3>Yorum Yap</h3>
+				<textarea name="commentContent" ${ticket.closed ? 'disabled' : ''}
 					placeholder="Yorumunuzu buraya yazın..." required></textarea>
 				<button type="submit"
 					class="${ticket.closed ? 'closed-ticket-btn' : ''}"
 					${ticket.closed ? 'disabled' : ''}>Gönder</button>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

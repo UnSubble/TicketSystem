@@ -12,6 +12,7 @@ import com.unsubble.backend.model.User;
 import com.unsubble.web.controllers.AdminController;
 import com.unsubble.web.controllers.TicketRepositoryController;
 import com.unsubble.web.controllers.UserRepositoryController;
+import com.unsubble.web.managers.PermissionChecker;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,10 +26,10 @@ public class TicketCreatorServlet extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		AdminController adminController = AdminController.getInstance();
-		Object usernameObj = req.getSession().getAttribute("username");
-		if (!"true".equals(req.getParameter("newTicket")))
+		if (PermissionChecker.redirectNonLogins(req, resp) || !"true".equals(req.getParameter("newTicket")))
 			return;
+		Object usernameObj = req.getSession().getAttribute("username");
+		AdminController adminController = AdminController.getInstance();
 		if (usernameObj != null && !adminController.isAdmin(usernameObj.toString())) {
 			String username = usernameObj.toString();
 			UserRepositoryController userController = UserRepositoryController.getInstance();
