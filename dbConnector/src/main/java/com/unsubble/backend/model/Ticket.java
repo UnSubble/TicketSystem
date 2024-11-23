@@ -149,10 +149,20 @@ public class Ticket {
     }
 
 	public enum Priority {
-		LOW,
-		NORMAL,
-		HIGH,
-		URGENT,
-		CRITICAL
+		LOW(1),
+		NORMAL(2),
+		HIGH(3),
+		URGENT(4),
+		CRITICAL(5);
+		
+		private final int level;
+		
+		private Priority(int level) {
+			this.level = level;
+		}
+		
+		public int getLevel() {
+			return level;
+		}
 	}
 }
